@@ -161,3 +161,149 @@ def say_hello():
     print("Hello!")
 
 say_hello()
+
+
+## Some Leetcode questions
+ Easy Level
+Two Sum (LeetCode #1)
+Problem: Find two numbers in an array that add up to a target.
+Solution:
+
+```
+def twoSum(nums, target):
+    num_dict = {}
+    for i, num in enumerate(nums):
+        diff = target - num
+        if diff in num_dict:
+            return [num_dict[diff], i]
+        num_dict[num] = i
+```
+Reverse a String (LeetCode #344)
+
+```
+def reverseString(s):
+    return s[::-1]  # Pythonic way
+Merge Two Sorted Lists (LeetCode #21)
+Problem: Merge two sorted linked lists.
+
+```
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+def mergeTwoLists(l1, l2):
+    if not l1 or not l2:
+        return l1 or l2
+    if l1.val < l2.val:
+        l1.next = mergeTwoLists(l1.next, l2)
+        return l1
+    else:
+        l2.next = mergeTwoLists(l1, l2.next)
+        return l2
+```
+🔹 Medium Level
+Longest Substring Without Repeating Characters (LeetCode #3)
+Solution: Sliding Window
+
+```
+def lengthOfLongestSubstring(s):
+    char_index = {}
+    left = 0
+    max_length = 0
+
+    for right in range(len(s)):
+        if s[right] in char_index and char_index[s[right]] >= left:
+            left = char_index[s[right]] + 1
+        char_index[s[right]] = right
+        max_length = max(max_length, right - left + 1)
+
+    return max_length
+```
+Binary Search in Rotated Sorted Array (LeetCode #33)
+
+```
+def search(nums, target):
+    left, right = 0, len(nums) - 1
+    while left <= right:
+        mid = (left + right) // 2
+        if nums[mid] == target:
+            return mid
+        if nums[left] <= nums[mid]:
+            if nums[left] <= target < nums[mid]:
+                right = mid - 1
+            else:
+                left = mid + 1
+        else:
+            if nums[mid] < target <= nums[right]:
+                left = mid + 1
+            else:
+                right = mid - 1
+    return -1
+```
+
+Find the Duplicate Number (LeetCode #287)
+Solution: Floyd's Tortoise and Hare (Cycle Detection)
+
+```
+def findDuplicate(nums):
+    slow, fast = nums[0], nums[0]
+    while True:
+        slow = nums[slow]
+        fast = nums[nums[fast]]
+        if slow == fast:
+            break
+    slow = nums[0]
+    while slow != fast:
+        slow = nums[slow]
+        fast = nums[fast]
+    return slow
+```
+🔹 Hard Level
+Median of Two Sorted Arrays (LeetCode #4)
+Solution: Binary Search on Shorter Array
+
+```
+def findMedianSortedArrays(nums1, nums2):
+    A, B = sorted((nums1, nums2), key=len)
+    m, n = len(A), len(B)
+    imin, imax, half_len = 0, m, (m + n + 1) // 2
+
+    while imin <= imax:
+        i = (imin + imax) // 2
+        j = half_len - i
+        if i < m and A[i] < B[j-1]:
+            imin = i + 1
+        elif i > 0 and A[i-1] > B[j]:
+            imax = i - 1
+        else:
+            max_of_left = max(A[i-1] if i > 0 else float('-inf'), B[j-1] if j > 0 else float('-inf'))
+            if (m + n) % 2 == 1:
+                return max_of_left
+            min_of_right = min(A[i] if i < m else float('inf'), B[j] if j < n else float('inf'))
+            return (max_of_left + min_of_right) / 2
+```
+Trapping Rain Water (LeetCode #42)
+Solution: Two-Pointer Approach
+
+```
+def trap(height):
+    left, right = 0, len(height) - 1
+    left_max, right_max = 0, 0
+    water = 0
+
+    while left < right:
+        if height[left] < height[right]:
+            if height[left] >= left_max:
+                left_max = height[left]
+            else:
+                water += left_max - height[left]
+            left += 1
+        else:
+            if height[right] >= right_max:
+                right_max = height[right]
+            else:
+                water += right_max - height[right]
+            right -= 1
+    return water
+```
