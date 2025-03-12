@@ -183,6 +183,7 @@ Reverse a String (LeetCode #344)
 ```
 def reverseString(s):
     return s[::-1]  # Pythonic way
+```
 Merge Two Sorted Lists (LeetCode #21)
 Problem: Merge two sorted linked lists.
 
